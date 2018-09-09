@@ -10,10 +10,25 @@
   <div id="app">
      <my-component1></my-component1>
      <my-component2></my-component2>
+     <child-component v-bind:propsdata="message" v-on:show-log="printText"></child-component>
    </div>
+   <script src="https://cdn.jsdelivr.net/npm/vue@2.5.2/dist/vue.js"></script>
    <script>
+
+   //상위 컴포넌트(인스턴스)에서 데이터를 받아오는 방법
+    Vue.component('child-component', {
+      props: ['propsdata'],
+      template:
+        '<button v-on:click="showLog">show</button>',
+      methods:{
+        showLog: function(){
+          this.$emit('show-log');
+        }
+      }
+    });
+
      var cmp1 = {
-       templalte: '<div>첫 번째 지역 컴포넌트 : {{cmp1Data}}</div>',
+       template: '<div>첫 번째 지역 컴포넌트 : {{cmp1Data}}</div>',
        data: function(){
          return {
            cmp1Data : 100
@@ -23,10 +38,28 @@
 
      var cmp2 = {
        template: '<div>두 번째 지역 컴포넌트 : {{cmp2Data}}</div>',
-       data: function{
-         cmp2Data : cmp1.data.cmp1Data
+       data: function(){
+         return{
+                    cmp2Data : cmp1.data.cmp1Data
+         }
        }
-     }
+     };
+
+     new Vue({
+      el: '#app',
+      components: {
+        'my-component1': cmp1,
+        'my-component2': cmp2
+      },
+      data: {
+        message: 'Hello Vue! passed from Parent Componet'
+      },
+      methods: {
+        printText: function(){
+          console.log("received an event");
+        }
+      }
+    });
    </script>
 </body>
 </html>
