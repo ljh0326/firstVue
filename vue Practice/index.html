@@ -1,0 +1,53 @@
+<html>
+  <head>
+    <title>Vue Sample</title>
+  </head>
+  <body>
+    <div id="app">
+      {{message}}
+      <my-component></my-component>
+      <my-local-cmp></my-local-cmp>
+      <child-component v-bind:passed-data="message"></child-component>
+    </div>
+
+    <script src="https://unpkg.com/vue@2.3.3"></script>
+    <script>
+      Vue.component('my-component',{
+        template: '<div>A custom component!</div>'
+      });
+
+      Vue.component('child-component',{
+        props:['passedData'],
+        template: '<p>{{passedData}}</p>'
+      });
+
+      let cmp = {
+        template: `<div>A custom</div>`,
+        data: {message: '안녕'}
+      };
+
+      new Vue({
+        el: '#app',
+        data: {
+          message: 'Hello Vue.js!'
+        },
+        components:{
+          'my-local-cmp': cmp
+        },
+        beforeCreate: function() {
+          console.log("beforeCreate");
+        },
+        created: function() {
+          console.log("created");
+        },
+        updated: function() {
+          console.log("updated");
+        }
+      });
+
+      new Vue({
+
+      })
+    </script>
+  </body>
+</html>
